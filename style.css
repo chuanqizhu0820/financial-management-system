@@ -1,0 +1,14 @@
+body {
+    margin-top: 5vh;
+}
+form {
+    margin-top: 5vh;
+    margin-left: 5vw;
+    width: 20vw;
+}
+
+table {
+    width: 30%;
+
+    /* margin-left: 30vw; */
+}

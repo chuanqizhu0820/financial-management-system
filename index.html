@@ -5,39 +5,46 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
     <title>Finance</title>
 </head>
 
 <body>
-    <h1>Hello </h1>
-    <form action="/add" method="post">
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date"><br><br>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount"><br><br>
-        <label for="category">Category:</label>
-        <select name="category" id="category">
-            <option value="rent">Rent</option>
-            <option value="food">Food</option>
-            <option value="clothes">Clothes</option>
-            <option value="traffic">Traffic</option>
-        </select><br><br>
-        <label for="note">Other note:</label>
-        <textarea id="note" name="note"></textarea><br><br>
-        <input type="submit" value="Add">
-    </form>
+    <div class="fixed-top">
+        <form action="/add" method="post">
+            <div class="mb-3">
+                <label for="date" class="form-label fw-bold">Date</label>
+                <input type="date" id="date" name="date" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label fw-bold">Amount</label>
+                <input type="number" id="amount" name="amount" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label fw-bold">Category:</label>
+                <select name="category" id="category" class="form-select" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <option value="rent">Rent</option>
+                    <option value="food">Food</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="traffic">Traffic</option>
+                </select>
+            </div>
 
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Other note</th>
-        </tr>
-        <div id="data-list">
-        </div>
+            <div class="mb-3">
+                <label for="note" class="form-label fw-bold">Other note:</label>
+                <textarea id="note" name="note" class="form-control"></textarea>
+            </div>
+            <input type="submit" value="ADD" class="btn btn-secondary">
+        </form>
+    </div>
+    <table class="table">
     </table>
 </body>
-<script src="main.js"></script>
+<script src=" main.js">
+</script>
 
 </html>

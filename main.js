@@ -27,20 +27,20 @@ form.addEventListener('submit', (e) => {
 })
 
 let tableHtml = `
-      <tr>
-      <th>Date</th>
-      <th>Amount</th>
-      <th>Category</th>
-      <th>Other note</th>
+      <tr class="row">
+      <th scope="col" class="col-2 offset-4">Date</th>
+      <th scope="col" class="col-2">Amount</th>
+      <th scope="col" class="col-2">Category</th>
+      <th scope="col" class="col-2">Other note</th>
       </tr>`;
 
 data.forEach((item) => {
     tableHtml += `
-    <tr>
-    <td>${item.date}</td>
-    <td>${item.amount}</td>
-    <td>${item.category}</td>
-    <td>${item.note}</td>
+    <tr class="row">
+    <td class="col-2 offset-4">${item.date}</td>
+    <td class="col-2">${item.amount}</td>
+    <td class="col-2">${item.category}</td>
+    <td class="col-2">${item.note}</td>
     </tr>`;
 });
 
