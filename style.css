@@ -4,11 +4,23 @@ body {
 form {
     margin-top: 5vh;
     margin-left: 5vw;
-    width: 20vw;
+    width: 15vw;
+}
+
+.fixed-top {
+    width: 15vw;
+}
+
+.analysis {
+    margin-left: 5vw;
 }
 
 table {
     width: 30%;
+}
 
-    /* margin-left: 30vw; */
+#popup-graph {
+    display: none;
+    width: 80vw;
+    height: 80vh;
 }
