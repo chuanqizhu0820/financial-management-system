@@ -2,17 +2,13 @@ body {
     margin-top: 5vh;
 }
 form {
-    margin-top: 5vh;
-    margin-left: 5vw;
     width: 15vw;
 }
 
 .fixed-top {
-    width: 15vw;
-}
-
-.analysis {
+    margin-top: 5vh;
     margin-left: 5vw;
+    width: 15vw;
 }
 
 table {

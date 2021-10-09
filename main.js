@@ -52,6 +52,21 @@ data.forEach((item) => {
 
 tableDiv.innerHTML = tableHtml;
 
+const cateArr = ["衣物饰品", "个人护理", "在外用餐", "零食",
+    "房租住宿", "水电气费", "家装建材", "家居用品",
+    "通信物流", "交通出行", "电器数码", "文化娱乐", "工作学习",
+    "养宠物", "健身运动", "药品", "保险", "十一奉献", "收入", "借出"];
+
+let cateHtml = '<option value="none">Please choose one</option>';
+
+const cateOpt = document.querySelector('#category');
+
+cateArr.forEach((item) => {
+    cateHtml += `<option value=${item}>${item}</option>`
+})
+
+cateOpt.innerHTML = cateHtml;
+
 const remove = document.querySelectorAll('.remove-item');
 
 remove.forEach((item) => {
@@ -61,22 +76,41 @@ remove.forEach((item) => {
 })
 
 let graphData = {
-    "rent": 0,
-    "food": 0,
-    "clothes": 0,
-    "traffic": 0
 };
+
+cateArr.forEach((item) => {
+    graphData[item] = 0;
+})
+
+console.log(graphData);
 
 data.forEach((item) => {
     let amount = parseInt(item.amount)
-    if (item.category == "rent") {
-        graphData.rent += amount;
-    } else if (item.category == "food") {
-        graphData.food += amount;
-    } else if (item.category == "clothes") {
-        graphData.clothes += amount;
-    } else if (item.category == "traffic") {
-        graphData.traffic += amount;
+    graphData[item.category] += amount;
+})
+
+const netValue = document.querySelector('#net-value');
+
+let sum = 0;
+cateArr.forEach((item) => {
+    sum -= graphData[item];
+})
+console.log(graphData['收入']);
+let netHtml =
+    `<button class="btn btn-light btn-sm mt-3" id="net-value-btn">Net Value</button><br>
+    <p class="mt-3" id="net-value-number" style="display:none">${sum + 2 * graphData['收入']}</p>`;
+
+netValue.innerHTML = netHtml;
+
+const valueNum = document.querySelector("#net-value-number");
+const valueBtn = document.querySelector("#net-value-btn");
+
+valueBtn.addEventListener("click", () => {
+    if (valueNum.style.display = "none") {
+        valueNum.style.display = "block";
+        valueBtn.addEventListener("click", () => {
+            location.reload();
+        })
     }
 })
 
@@ -95,9 +129,15 @@ closeGraph.addEventListener('click', () => {
     graph.style.display = "none";
 })
 
-let dataset = [graphData.rent, graphData.food, graphData.clothes, graphData.traffic];
+let dataset = [];
 
-const width = 500;
+cateArr.forEach((item) => {
+    dataset.push(graphData[item])
+})
+
+console.log(dataset);
+
+const width = 1000;
 const height = 500;
 const margin = 50;
 const padding = 50;
@@ -105,14 +145,16 @@ const padding = 50;
 const barWidth = width / (dataset.length);
 
 const xScale = d3.scaleBand()
-    .domain(['Rent', 'Food', 'Clothes', 'Traffic'])
+    .domain(cateArr)
     .range([0, width]);
 
 let x_axis = d3.axisBottom(xScale);
 
 let yscale = d3.scaleLinear()
-    .domain([d3.min(dataset) - 50, d3.max(dataset) + 50])
+    .domain([d3.min(dataset), d3.max(dataset) + 50])
     .range([height, 0]);
+
+console.log(yscale(100));
 
 let y_axis = d3.axisLeft(yscale);
 
@@ -129,9 +171,9 @@ svg.append('g')
     .attr('fill', 'grey')
     .attr("transform", `translate(${padding},0)`)
     .attr('width', `${barWidth / 2}`)
-    .attr('height', (d) => yscale(d))
+    .attr('height', (d) => yscale(0) - yscale(d))
     .attr('x', (d, i) => (barWidth * i + barWidth / 4))
-    .attr('y', (d) => (height - yscale(d)));
+    .attr('y', (d) => (height - yscale(0) + yscale(d)));
 
 svg.append("g")
     .attr("transform", `translate(${padding},0)`)
