@@ -5,11 +5,44 @@ const category = document.querySelector('#category');
 const note = document.querySelector('#note');
 const tableDiv = document.querySelector('table');
 
-let data;
-
-if (localStorage.getItem('dataArr')) {
-    data = JSON.parse(localStorage.getItem('dataArr'));
+let filter = {};
+if (localStorage.getItem('filter')) {
+    filter = JSON.parse(localStorage.getItem('filter'));
 } else {
+    filter = {
+        status: false,
+        from: "2021-10-01",
+        to: "2021-11-30"
+    }
+    localStorage.setItem('filter', JSON.stringify(filter))
+}
+
+const dataFilter = document.querySelector("#filter button");
+dataFilter.addEventListener("click", () => {
+    if (filter.status == false) {
+        filter.status = true;
+    } else {
+        filter.status = false;
+    }
+    localStorage.setItem('filter', JSON.stringify(filter))
+    location.reload();
+})
+
+let data;
+if (localStorage.getItem('dataArr') && filter.status == false) {
+    data = JSON.parse(localStorage.getItem('dataArr'));
+} else if (localStorage.getItem('dataArr') && filter.status) {
+    data = JSON.parse(localStorage.getItem('dataArr'));
+    let newData = [];
+    data.forEach((item) => {
+        dateItem = new Date(item.date);
+        if (dateItem >= new Date(filter.from) && dateItem <= new Date(filter.to)) {
+            newData.push(item);
+        }
+    })
+    data = newData;
+}
+else {
     data = [];
 }
 
@@ -24,8 +57,9 @@ form.addEventListener('submit', (e) => {
     formObj.amount = amount.value;
     formObj.category = category.value;
     formObj.note = note.value;
-    data.push(formObj);
-    localStorage.setItem('dataArr', JSON.stringify(data));
+    let localData = JSON.parse(localStorage.getItem('dataArr'));
+    localData.push(formObj);
+    localStorage.setItem('dataArr', JSON.stringify(localData));
     location.reload();
     e.preventDefault();
 })
@@ -82,8 +116,6 @@ cateArr.forEach((item) => {
     graphData[item] = 0;
 })
 
-console.log(graphData);
-
 data.forEach((item) => {
     let amount = parseInt(item.amount)
     graphData[item.category] += amount;
@@ -95,10 +127,11 @@ let sum = 0;
 cateArr.forEach((item) => {
     sum -= graphData[item];
 })
-console.log(graphData['收入']);
+
+
 let netHtml =
-    `<button class="btn btn-light btn-sm mt-3" id="net-value-btn">Net Value</button><br>
-    <p class="mt-3" id="net-value-number" style="display:none">${sum + 2 * graphData['收入']}</p>`;
+    `<button class="btn btn-light btn-sm" id="net-value-btn">Net Value</button><br>
+    <p id="net-value-number" style="display:none">${sum + 2 * graphData['收入']}</p>`;
 
 netValue.innerHTML = netHtml;
 
@@ -115,7 +148,7 @@ valueBtn.addEventListener("click", () => {
 })
 
 const main = document.querySelector('main');
-const showGraph = document.querySelector('.analysis');
+const showGraph = document.querySelector('#graph');
 const graph = document.querySelector('#popup-graph');
 const closeGraph = document.querySelector("#close-graph");
 
@@ -129,13 +162,12 @@ closeGraph.addEventListener('click', () => {
     graph.style.display = "none";
 })
 
+
 let dataset = [];
 
 cateArr.forEach((item) => {
     dataset.push(graphData[item])
 })
-
-console.log(dataset);
 
 const width = 1000;
 const height = 500;
