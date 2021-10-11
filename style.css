@@ -5,7 +5,8 @@ form {
     width: 15vw;
 }
 
-.fixed-top {
+#fixed-form {
+    width: 15vw;
     margin-top: 5vh;
     margin-left: 5vw;
 }

@@ -17,6 +17,7 @@ if (localStorage.getItem('filter')) {
     localStorage.setItem('filter', JSON.stringify(filter))
 }
 
+
 let graphStatus = {};
 if (localStorage.getItem('graph')) {
     graphStatus = JSON.parse(localStorage.getItem('graph'));
@@ -36,7 +37,7 @@ if (filter.status) {
         <label class="switch">
         <input type="checkbox" id="switch" checked>
         <span class="slider"></span>
-        </label> 
+        </label>
         <i class="fas fa-edit" id="edit"></i>
         `
 }
@@ -86,12 +87,14 @@ form.addEventListener('submit', (e) => {
         date: "",
         amount: "",
         category: "",
-        note: ""
+        note: "",
+        index: ""
     };
     formObj.date = date.value;
     formObj.amount = amount.value;
     formObj.category = category.value;
     formObj.note = note.value;
+    formObj.index = date.value + amount.value + category.value + note.value;
     let localData = JSON.parse(localStorage.getItem('dataArr'));
     localData.push(formObj);
     localStorage.setItem('dataArr', JSON.stringify(localData));
@@ -138,9 +141,18 @@ cateOpt.innerHTML = cateHtml;
 
 const remove = document.querySelectorAll('.remove-item');
 
-remove.forEach((item) => {
+remove.forEach((item, i) => {
     item.addEventListener('click', () => {
-        console.log("remove this");
+        let localData = JSON.parse(localStorage.getItem('dataArr'));
+
+        localData.forEach((item) => {
+            if (item.index === data[i].index) {
+                console.log("has")
+                localData.splice(i, 1);
+                localStorage.setItem('dataArr', JSON.stringify(localData));
+                location.reload();
+            }
+        })
     })
 })
 
@@ -187,14 +199,14 @@ const graph = document.querySelector('#popup-graph');
 if (graphStatus.status) {
     graphBtn.innerHTML =
 
-        `<label id="graph-label">Filter</label>
+        `<label id="graph-label">Graph</label>
         <label class="switch">
         <input type="checkbox" id="graph-switch" checked>
         <span class="slider"></span>
         </label> `;
 } else {
     graphBtn.innerHTML =
-        `<label id="graph-label">Filter</label>
+        `<label id="graph-label">Graph</label>
         <label class="switch">
         <input type="checkbox" id="graph-switch" unchecked>
         <span class="slider"></span>
@@ -229,10 +241,29 @@ graphSwitch.addEventListener('click', () => {
 })
 
 const fixedForm = document.querySelector("#fixed-form");
-const editForm = document.querySelector("#edit-filter")
 const openEdit = document.querySelector("#filter #edit");
-const closeEdit = document.querySelector("#close-edit");
 const filterDiv = document.querySelector("#popup-filter");
+
+filterDiv.innerHTML =
+    `<p>The current filter condition is</p>
+    <p>[From] ${filter.from}</p>
+    <p>[To] ${filter.to}</p>
+            <form id="edit-filter">
+                <div class="mb-3">
+                    <label for="from" class="form-label fw-bold">From</label>
+                    <input type="date" id="datefrom" name="from" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="to" class="form-label fw-bold">To</label>
+                    <input type="date" id="dateto" name="to" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-secondary">Update</button>
+            </form>
+            <button id="close-edit" class="btn btn-light-sm mt-3">Close</button>`;
+
+const closeEdit = document.querySelector("#close-edit");
+const editForm = document.querySelector("#edit-filter")
+
 openEdit.addEventListener("click", () => {
     filterDiv.style.display = "block";
     fixedForm.style.display = "none";
@@ -249,9 +280,10 @@ const dateTo = document.querySelector("#dateto");
 editForm.addEventListener("submit", () => {
     filter.from = dateFrom.value;
     filter.to = dateTo.value;
+    console.log(dateFrom.value);
     filter.status = true;
-    localStorage.setItem('filter', JSON.stringify(filter))
-    console.log(filter);
+    localStorage.setItem('filter', JSON.stringify(filter));
+    // location.reload();
 })
 
 let dataset = [];
