@@ -3,7 +3,7 @@ const date = document.querySelector('#input-date');
 const amount = document.querySelector('#amount');
 const category = document.querySelector('#category');
 const note = document.querySelector('#note');
-const tableDiv = document.querySelector('table');
+const table = document.querySelector('.table');
 
 let filter = {};
 if (localStorage.getItem('filter')) {
@@ -85,7 +85,7 @@ data.forEach((item) => {
     </tr>`;
 });
 
-tableDiv.innerHTML = tableHtml;
+table.innerHTML = tableHtml;
 
 const cateArr = ["衣物饰品", "个人护理", "在外用餐", "零食",
     "房租住宿", "水电气费", "家装建材", "家居用品",
@@ -148,32 +148,45 @@ valueBtn.addEventListener("click", () => {
     }
 })
 
-const main = document.querySelector('main');
 const showGraph = document.querySelector('#graph');
 const graph = document.querySelector('#popup-graph');
 const closeGraph = document.querySelector("#close-graph");
 
 showGraph.addEventListener('click', () => {
-    main.style.display = "none";
+    table.style.display = "none";
     graph.style.display = "block";
 })
 
 closeGraph.addEventListener('click', () => {
-    main.style.display = "block";
+    table.style.display = "block";
     graph.style.display = "none";
+    location.reload();
 })
 
-const filterEdit = document.querySelector("#filter #edit");
+const fixedForm = document.querySelector("#fixed-form");
+const editForm = document.querySelector("#edit-filter")
+const openEdit = document.querySelector("#filter #edit");
 const closeEdit = document.querySelector("#close-edit");
 const filterDiv = document.querySelector("#popup-filter");
-filterEdit.addEventListener("click", () => {
+openEdit.addEventListener("click", () => {
     filterDiv.style.display = "block";
-    main.style.display = "none";
+    fixedForm.style.display = "none";
 })
 
 closeEdit.addEventListener("click", () => {
     filterDiv.style.display = "none";
-    main.style.display = "block";
+    fixedForm.style.display = "block";
+})
+
+const dateFrom = document.querySelector("#datefrom");
+const dateTo = document.querySelector("#dateto");
+
+editForm.addEventListener("submit", () => {
+    filter.from = dateFrom.value;
+    filter.to = dateTo.value;
+    filter.status = true;
+    localStorage.setItem('filter', JSON.stringify(filter))
+    console.log(filter);
 })
 
 let dataset = [];
