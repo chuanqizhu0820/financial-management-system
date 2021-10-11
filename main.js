@@ -1,5 +1,5 @@
-const form = document.querySelector('form');
-const date = document.querySelector('#date');
+const form = document.querySelector('#add-form');
+const date = document.querySelector('#input-date');
 const amount = document.querySelector('#amount');
 const category = document.querySelector('#category');
 const note = document.querySelector('#note');
@@ -17,8 +17,8 @@ if (localStorage.getItem('filter')) {
     localStorage.setItem('filter', JSON.stringify(filter))
 }
 
-const dataFilter = document.querySelector("#filter button");
-dataFilter.addEventListener("click", () => {
+const filterSwitch = document.querySelector("#filter #switch");
+filterSwitch.addEventListener("click", () => {
     if (filter.status == false) {
         filter.status = true;
     } else {
@@ -44,6 +44,7 @@ if (localStorage.getItem('dataArr') && filter.status == false) {
 }
 else {
     data = [];
+    localStorage.setItem('dataArr', JSON.stringify(data));
 }
 
 form.addEventListener('submit', (e) => {
@@ -162,6 +163,18 @@ closeGraph.addEventListener('click', () => {
     graph.style.display = "none";
 })
 
+const filterEdit = document.querySelector("#filter #edit");
+const closeEdit = document.querySelector("#close-edit");
+const filterDiv = document.querySelector("#popup-filter");
+filterEdit.addEventListener("click", () => {
+    filterDiv.style.display = "block";
+    main.style.display = "none";
+})
+
+closeEdit.addEventListener("click", () => {
+    filterDiv.style.display = "none";
+    main.style.display = "block";
+})
 
 let dataset = [];
 

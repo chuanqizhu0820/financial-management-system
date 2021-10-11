@@ -20,3 +20,7 @@ table {
     width: 80vw;
     height: 80vh;
 }
+
+#popup-filter {
+    display: none;
+}
