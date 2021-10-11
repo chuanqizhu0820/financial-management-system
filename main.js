@@ -11,10 +11,44 @@ if (localStorage.getItem('filter')) {
 } else {
     filter = {
         status: false,
-        from: "2021-10-01",
-        to: "2021-11-30"
+        from: "",
+        to: ""
     }
     localStorage.setItem('filter', JSON.stringify(filter))
+}
+
+let graphStatus = {};
+if (localStorage.getItem('graph')) {
+    graphStatus = JSON.parse(localStorage.getItem('graph'));
+} else {
+    graphStatus = {
+        status: false
+    }
+    localStorage.setItem('graph', JSON.stringify(graphStatus));
+}
+
+filterBtns = document.querySelector("#filter");
+
+if (filter.status) {
+    filterBtns.innerHTML =
+
+        ` <label id="filter-label">Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="switch" checked>
+        <span class="slider"></span>
+        </label> 
+        <i class="fas fa-edit" id="edit"></i>
+        `
+}
+else if (filter.status == false) {
+    filterBtns.innerHTML =
+        `  <label id="filter-label">Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="switch" unchecked>
+        <span class="slider"></span>
+        </label>
+          <i class="fas fa-edit" id="edit"></i>
+          `
 }
 
 const filterSwitch = document.querySelector("#filter #switch");
@@ -129,7 +163,6 @@ cateArr.forEach((item) => {
     sum -= graphData[item];
 })
 
-
 let netHtml =
     `<button class="btn btn-light btn-sm" id="net-value-btn">Net Value</button><br>
     <p id="net-value-number" style="display:none">${sum + 2 * graphData['收入']}</p>`;
@@ -148,19 +181,51 @@ valueBtn.addEventListener("click", () => {
     }
 })
 
-const showGraph = document.querySelector('#graph');
+const graphBtn = document.querySelector('#graph');
 const graph = document.querySelector('#popup-graph');
-const closeGraph = document.querySelector("#close-graph");
 
-showGraph.addEventListener('click', () => {
+if (graphStatus.status) {
+    graphBtn.innerHTML =
+
+        `<label id="graph-label">Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="graph-switch" checked>
+        <span class="slider"></span>
+        </label> `;
+} else {
+    graphBtn.innerHTML =
+        `<label id="graph-label">Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="graph-switch" unchecked>
+        <span class="slider"></span>
+        </label> `;
+}
+const graphSwitch = document.querySelector('#graph-switch')
+
+if (graphStatus.status == true) {
     table.style.display = "none";
     graph.style.display = "block";
-})
-
-closeGraph.addEventListener('click', () => {
-    table.style.display = "block";
+} else {
+    table.style.display = "table";
     graph.style.display = "none";
-    location.reload();
+}
+
+graphSwitch.addEventListener('click', () => {
+    if (graphStatus.status) {
+        graphStatus.status = false;
+    }
+    else {
+        graphStatus.status = true;
+    }
+    localStorage.setItem('graph', JSON.stringify(graphStatus));
+    if (graphStatus.status == true) {
+        table.style.display = "none";
+        graph.style.display = "block";
+    } else {
+        table.style.display = "table";
+        graph.style.display = "none";
+    }
+    // location.reload();
 })
 
 const fixedForm = document.querySelector("#fixed-form");
