@@ -236,12 +236,12 @@ editItem.forEach((item, i) => {
         let localData = JSON.parse(localStorage.getItem('dataArr'));
         localData.forEach((item) => {
             if (item.index === data[i].index) {
-                localData.splice(i, 1);
-                localStorage.setItem('dataArr', JSON.stringify(localData));
                 form.date.value = item.date;
                 form.amount.value = item.amount;
                 form.category.value = item.category;
                 form.note.value = item.note;
+                localData.splice(i, 1);
+                localStorage.setItem('dataArr', JSON.stringify(localData));
             }
         })
     })
