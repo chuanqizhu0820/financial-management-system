@@ -169,7 +169,7 @@ form.addEventListener('submit', (e) => {
 
     localData.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
-    })
+    }).reverse();
 
     localStorage.setItem('dataArr', JSON.stringify(localData));
     location.reload();
@@ -192,7 +192,7 @@ data.forEach((item) => {
     <td class="col-1">${item.amount}</td>
     <td class="col-2">${item.category}</td>
     <td class="col-2">${item.note}</td>
-    <td class="col-1"><i class="fas fa-times-circle remove-item"></i><i class="fas fa-edit edit-item""></i></td>
+    <td class="col-1"><i class="fas fa-times-circle remove-item"></i><span> | </span><i class="fas fa-edit edit-item""></i></td>
     </tr>`;
 });
 
