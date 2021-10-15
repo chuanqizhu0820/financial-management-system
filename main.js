@@ -118,7 +118,7 @@ data.forEach((item) => {
     <td class="col-1">${item.amount}</td>
     <td class="col-2">${item.category}</td>
     <td class="col-2">${item.note}</td>
-    <td class="col-1"><i class="fas fa-times-circle remove-item"></i></td>
+    <td class="col-1"><i class="fas fa-times-circle remove-item"></i><i class="fas fa-edit edit-item""></i></td>
     </tr>`;
 });
 
@@ -147,7 +147,6 @@ remove.forEach((item, i) => {
 
         localData.forEach((item) => {
             if (item.index === data[i].index) {
-                console.log("has")
                 localData.splice(i, 1);
                 localStorage.setItem('dataArr', JSON.stringify(localData));
                 location.reload();
@@ -155,6 +154,25 @@ remove.forEach((item, i) => {
         })
     })
 })
+
+const editItem = document.querySelectorAll(".edit-item");
+
+editItem.forEach((item, i) => {
+    item.addEventListener('click', () => {
+        let localData = JSON.parse(localStorage.getItem('dataArr'));
+        localData.forEach((item) => {
+            if (item.index === data[i].index) {
+                localData.splice(i, 1);
+                localStorage.setItem('dataArr', JSON.stringify(localData));
+                form.date.value = item.date;
+                form.amount.value = item.amount;
+                form.category.value = item.category;
+                form.note.value = item.note;
+            }
+        })
+    })
+})
+
 
 let graphData = {
 };
