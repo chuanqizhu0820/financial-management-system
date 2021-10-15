@@ -17,6 +17,17 @@ if (localStorage.getItem('filter')) {
     localStorage.setItem('filter', JSON.stringify(filter))
 }
 
+let cateFilter = {};
+if (localStorage.getItem('catefilter')) {
+    cateFilter = JSON.parse(localStorage.getItem('catefilter'));
+} else {
+    cateFilter = {
+        status: false,
+        cate: "",
+    }
+    localStorage.setItem('catefilter', JSON.stringify(cateFilter))
+}
+
 
 let graphStatus = {};
 if (localStorage.getItem('graph')) {
@@ -28,12 +39,12 @@ if (localStorage.getItem('graph')) {
     localStorage.setItem('graph', JSON.stringify(graphStatus));
 }
 
-filterBtns = document.querySelector("#filter");
+const filterBtns = document.querySelector("#filter");
 
 if (filter.status) {
     filterBtns.innerHTML =
 
-        ` <label id="filter-label">Filter</label>
+        ` <label id="filter-label">Date Filter</label>
         <label class="switch">
         <input type="checkbox" id="switch" checked>
         <span class="slider"></span>
@@ -43,12 +54,35 @@ if (filter.status) {
 }
 else if (filter.status == false) {
     filterBtns.innerHTML =
-        `  <label id="filter-label">Filter</label>
+        `  <label id="filter-label">Date Filter</label>
         <label class="switch">
         <input type="checkbox" id="switch" unchecked>
         <span class="slider"></span>
         </label>
           <i class="fas fa-edit" id="edit"></i>
+          `
+}
+
+const cateFilterBtn = document.querySelector("#cate-filter");
+
+if (cateFilter.status) {
+    cateFilterBtn.innerHTML =
+        ` <label id="filter-label">Category Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="switch" checked>
+        <span class="slider"></span>
+        </label>
+        <i class="fas fa-edit" id="cate-edit"></i>
+        `
+}
+else if (cateFilter.status == false) {
+    cateFilterBtn.innerHTML =
+        `  <label id="filter-label">Category Filter</label>
+        <label class="switch">
+        <input type="checkbox" id="switch" unchecked>
+        <span class="slider"></span>
+        </label>
+          <i class="fas fa-edit" id="cate-edit"></i>
           `
 }
 
@@ -63,15 +97,50 @@ filterSwitch.addEventListener("click", () => {
     location.reload();
 })
 
+const cateFilterSwitch = document.querySelector("#cate-filter #switch");
+cateFilterSwitch.addEventListener("click", () => {
+    if (cateFilter.status == false) {
+        cateFilter.status = true;
+    } else {
+        cateFilter.status = false;
+    }
+    localStorage.setItem('catefilter', JSON.stringify(cateFilter))
+    location.reload();
+})
+
+
 let data;
-if (localStorage.getItem('dataArr') && filter.status == false) {
+
+if (localStorage.getItem('dataArr') && filter.status == false && cateFilter.status == false) {
     data = JSON.parse(localStorage.getItem('dataArr'));
-} else if (localStorage.getItem('dataArr') && filter.status) {
+}
+else if (localStorage.getItem('dataArr') && filter.status && cateFilter.status == false) {
     data = JSON.parse(localStorage.getItem('dataArr'));
     let newData = [];
     data.forEach((item) => {
         dateItem = new Date(item.date);
         if (dateItem >= new Date(filter.from) && dateItem <= new Date(filter.to)) {
+            newData.push(item);
+        }
+    })
+    data = newData;
+}
+else if (localStorage.getItem('dataArr') && cateFilter.status && filter.status == false) {
+    data = JSON.parse(localStorage.getItem('dataArr'));
+    let newData = [];
+    data.forEach((item) => {
+        if (item.category == cateFilter.cate) {
+            newData.push(item);
+        }
+    })
+    data = newData;
+}
+else if (localStorage.getItem('dataArr') && cateFilter.status && filter.status) {
+    data = JSON.parse(localStorage.getItem('dataArr'));
+    let newData = [];
+    data.forEach((item) => {
+        dateItem = new Date(item.date);
+        if (item.category == cateFilter.cate && dateItem >= new Date(filter.from) && dateItem <= new Date(filter.to)) {
             newData.push(item);
         }
     })
@@ -308,6 +377,45 @@ editForm.addEventListener("submit", () => {
     localStorage.setItem('filter', JSON.stringify(filter));
     // location.reload();
 })
+
+const cateFilterDiv = document.querySelector("#popup-cate-filter");
+cateFilterDiv.innerHTML =
+    `
+<p>the current filter condition is</p>
+<p> [Category] ${cateFilter.cate} </p>
+           <form id="edit-cate-filter">
+                <div class="mb-3">
+                    <label for="from" class="form-label fw-bold">Category</label>
+                    <select name="category" id="category" class="form-select" aria-label="Default select example">
+                    ` + cateHtml +
+    `</select>
+                </div>
+                <button type="submit" class="btn btn-secondary">Update</button>
+            </form>
+            <button id="close-cate-edit" class="btn btn-light-sm mt-3">Close</button>`;
+
+const openCateEdit = document.querySelector("#cate-filter #cate-edit");
+const closeCateEdit = document.querySelector("#close-cate-edit");
+const editCateForm = document.querySelector("#edit-cate-filter")
+console.log(openCateEdit);
+
+openCateEdit.addEventListener("click", () => {
+    cateFilterDiv.style.display = "block";
+    fixedForm.style.display = "none";
+})
+
+closeCateEdit.addEventListener("click", () => {
+    cateFilterDiv.style.display = "none";
+    fixedForm.style.display = "block";
+})
+
+editCateForm.addEventListener("submit", () => {
+    cateFilter.cate = editCateForm.category.value;
+    cateFilter.status = true;
+    localStorage.setItem('catefilter', JSON.stringify(cateFilter));
+    // location.reload();
+})
+
 
 let dataset = [];
 

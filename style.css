@@ -18,7 +18,7 @@ form {
     margin-left: 15vw;
     margin-top: 10vh;
 }
-
+#popup-cate-filter,
 #popup-filter {
     display: none;
     margin-top: 5vh;
