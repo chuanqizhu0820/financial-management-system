@@ -151,6 +151,10 @@ else {
     localStorage.setItem('dataArr', JSON.stringify(data));
 }
 
+data.sort(function (a, b) {
+    return new Date(b.date) - new Date(a.date);
+})
+
 form.addEventListener('submit', (e) => {
     let formObj = {
         date: "",
@@ -166,11 +170,6 @@ form.addEventListener('submit', (e) => {
     formObj.index = date.value + amount.value + category.value + note.value;
     let localData = JSON.parse(localStorage.getItem('dataArr'));
     localData.push(formObj);
-
-    localData.sort(function (a, b) {
-        return new Date(a.date) - new Date(b.date);
-    })
-
     localStorage.setItem('dataArr', JSON.stringify(localData));
     location.reload();
     e.preventDefault();
@@ -415,7 +414,6 @@ editCateForm.addEventListener("submit", () => {
     localStorage.setItem('catefilter', JSON.stringify(cateFilter));
     // location.reload();
 })
-
 
 let dataset = [];
 
